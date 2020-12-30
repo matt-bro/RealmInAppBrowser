@@ -12,6 +12,12 @@ import RealmSwift
 class MasterViewController: UITableViewController {
 
     var detailViewController: UIViewController? = nil
+    var store: RealmStore? {
+        didSet {
+            self.store?.update()
+            self.tableView.reloadData()
+        }
+    }
     var objects = [Any]()
 
 
@@ -91,13 +97,13 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return objects.count
+        return self.store?.classNames.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        let object = objects[indexPath.row] as! String
-        cell.textLabel!.text = object
+        let className = self.store?.className(index: indexPath.row)
+        cell.textLabel?.text = className
         return cell
     }
 

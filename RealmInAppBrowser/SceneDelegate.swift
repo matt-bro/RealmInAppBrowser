@@ -18,6 +18,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UISplitViewControllerDe
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let window = window else { return }
+
+        //RealmController.shared.entries(for: "Person")
+
+              let store = RealmStore()
+              let schema = store.get(schema: 0)
+              print(schema?.className)
+              print(store.classNames)
+
         guard let splitViewController = window.rootViewController as? UISplitViewController else { return }
         guard let navigationController = splitViewController.viewControllers.last as? UINavigationController else { return }
         navigationController.topViewController?.navigationItem.leftBarButtonItem = splitViewController.displayModeButtonItem
@@ -25,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UISplitViewControllerDe
         splitViewController.delegate = self
 
         RealmController.shared.setup()
-        RealmController.shared.entries(for: "Person")
+
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

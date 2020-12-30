@@ -22,6 +22,7 @@
 		C981070D257D08D5007890BD /* CustomSplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C981070C257D08D5007890BD /* CustomSplitViewController.swift */; };
 		C981070F257D111B007890BD /* TestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C981070E257D111B007890BD /* TestModels.swift */; };
 		C9D3370B259CC0BB008A4A42 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3370A259CC0BB008A4A42 /* ViewController.swift */; };
+		C9D3370D259CDA18008A4A42 /* RealmStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9D3370C259CDA18008A4A42 /* RealmStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +45,7 @@
 		C981070C257D08D5007890BD /* CustomSplitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSplitViewController.swift; sourceTree = "<group>"; };
 		C981070E257D111B007890BD /* TestModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestModels.swift; sourceTree = "<group>"; };
 		C9D3370A259CC0BB008A4A42 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C9D3370C259CDA18008A4A42 /* RealmStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +104,7 @@
 				C981070E257D111B007890BD /* TestModels.swift */,
 				C92970862596A1DF00E91F94 /* RealmController.swift */,
 				C9D3370A259CC0BB008A4A42 /* ViewController.swift */,
+				C9D3370C259CDA18008A4A42 /* RealmStore.swift */,
 			);
 			path = RealmInAppBrowser;
 			sourceTree = "<group>";
@@ -235,6 +238,7 @@
 				C91EC2DE252CE20D00031B44 /* SceneDelegate.swift in Sources */,
 				C92970872596A1DF00E91F94 /* RealmController.swift in Sources */,
 				C9D3370B259CC0BB008A4A42 /* ViewController.swift in Sources */,
+				C9D3370D259CDA18008A4A42 /* RealmStore.swift in Sources */,
 				C91EC2E0252CE20D00031B44 /* MasterViewController.swift in Sources */,
 				C91EC2E2252CE20D00031B44 /* DetailViewController.swift in Sources */,
 				C91EC2F2252CE45300031B44 /* ObjectsTVC.swift in Sources */,

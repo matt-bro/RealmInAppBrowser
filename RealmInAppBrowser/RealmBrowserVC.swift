@@ -73,7 +73,8 @@ extension RealmBrowserVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeaderCell.identifier, for: indexPath) as! HeaderCell
-            cell.textLabel.text = headers[indexPath.row]
+            let property = headers[indexPath.row]
+            cell.textLabel.text = property
             cell.indexPath = indexPath
             cell.pressedAction = { index in
                 if let index = index {
@@ -81,6 +82,14 @@ extension RealmBrowserVC: UICollectionViewDataSource {
                     self.pressedSort(for: self.headers[index.row])
                 }
             }
+
+            if let sortingBy = self.sortingBy {
+                if sortingBy.name == property {
+                    let arrow = sortingBy.asc == true ? " \u{2191}" : " \u{2193}"
+                    cell.textLabel.text?.append(arrow)
+                }
+            }
+
             return cell
         }
 
@@ -92,6 +101,9 @@ extension RealmBrowserVC: UICollectionViewDataSource {
         //print("\(indexPath.section) - \(indexPath.row)")
         return cell
     }
+
+    func configureHeaderCell() {}
+    func configureDataCell() {}
 
     //TODO: sort need to consider the type in the future
     func pressedSort(for propertyName: String) {
