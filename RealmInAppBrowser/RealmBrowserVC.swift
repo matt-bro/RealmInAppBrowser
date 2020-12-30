@@ -13,6 +13,9 @@ class RealmBrowserVC: UIViewController {
 
     var headers:[String] = []
     var objects:[DynamicObject] = []
+    var collectionVC: UICollectionViewController?
+
+    var sortingBy: (name: String, asc: Bool)?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,16 +42,23 @@ class RealmBrowserVC: UIViewController {
             cvc.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0)
         ])
 
+        self.collectionVC = cvc
+
     }
 }
 
 extension RealmBrowserVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 0 {
-            return CGSize(width: 200, height: 20)
+            return CGSize(width: 200, height: 15)
         }
         return CGSize(width: 200, height: 20)
     }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+    }
+
 }
 
 extension RealmBrowserVC: UICollectionViewDataSource {
@@ -64,6 +74,13 @@ extension RealmBrowserVC: UICollectionViewDataSource {
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeaderCell.identifier, for: indexPath) as! HeaderCell
             cell.textLabel.text = headers[indexPath.row]
+            cell.indexPath = indexPath
+            cell.pressedAction = { index in
+                if let index = index {
+                    print("sort by \(self.headers[index.row])")
+                    self.pressedSort(for: self.headers[index.row])
+                }
+            }
             return cell
         }
 
@@ -76,12 +93,40 @@ extension RealmBrowserVC: UICollectionViewDataSource {
         return cell
     }
 
+    //TODO: sort need to consider the type in the future
+    func pressedSort(for propertyName: String) {
+        if objects.isEmpty { return }
 
+        var ascending = false
+
+        if let sortingBy = sortingBy {
+            if sortingBy.name == propertyName {
+                ascending = !sortingBy.asc
+                self.sortingBy = (propertyName, ascending)
+            } else {
+                self.sortingBy = (propertyName, ascending)
+            }
+        } else {
+            self.sortingBy = (propertyName, ascending)
+        }
+        //check if property exists
+        self.objects.sort(by: {
+            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
+                if ascending { return val1 < val2 } else { return val1 > val2 }
+            }
+            return true
+        })
+
+        self.collectionVC?.collectionView.reloadData()
+    }
 }
 
 class HeaderCell: UICollectionViewCell {
 
     var textLabel = UILabel()
+    var actionBtn: UIButton?
+    var indexPath: IndexPath?
+    var pressedAction: ((IndexPath?)->())?
     static let identifier = "HeaderCell"
 
     override init(frame: CGRect) {
@@ -98,7 +143,25 @@ class HeaderCell: UICollectionViewCell {
             textLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         ])
 
-        self.backgroundColor = .systemGray3
+        self.backgroundColor = .systemGray4
+
+        let actionBtn = UIButton(type: .custom)
+        actionBtn.translatesAutoresizingMaskIntoConstraints = false
+        actionBtn.addTarget(self, action: #selector(pressedActionBtn), for: .touchUpInside)
+        contentView.addSubview(actionBtn)
+
+        NSLayoutConstraint.activate([
+            actionBtn.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            actionBtn.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
+            actionBtn.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 5),
+            actionBtn.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
+        ])
+        
+        self.actionBtn = actionBtn
+    }
+
+    @objc func pressedActionBtn() {
+        self.pressedAction?(self.indexPath)
     }
 
     required init?(coder: NSCoder) {

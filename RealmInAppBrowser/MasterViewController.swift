@@ -24,8 +24,10 @@ class MasterViewController: UITableViewController {
         navigationItem.rightBarButtonItem = addButton
         if let split = splitViewController {
             let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? DetailViewController
+            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? RealmBrowserVC
         }
+
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
 
         RealmController.shared.tables()
         self.objects = RealmController.shared.objectNames
@@ -48,7 +50,11 @@ class MasterViewController: UITableViewController {
         let randomNumber = Int.random(in: 1000...9999)
         object.id = "\(randomNumber)"
         object.firstName = "firstName \(randomNumber)"
-        object.firstName = "lastName \(randomNumber)"
+        object.lastName = "lastName \(randomNumber)"
+        object.address = "Address \(Int.random(in: 100...999))"
+        object.phone = "+00 \(Int.random(in: 10000...99999))"
+        object.mobile = "+00 \(Int.random(in: 10000...99999))"
+        object.birthdate = Date()
         try! realm.write {
             realm.add(object)
         }
@@ -57,26 +63,26 @@ class MasterViewController: UITableViewController {
 
     }
 
-    // MARK: - Segues
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetail" {
-            if let indexPath = tableView.indexPathForSelectedRow {
-                let objectName = self.objects[indexPath.row] as! String
-                let entries = RealmController.shared.entries(for: objectName)
-                //let object = objects[indexPath.row] as! NSDate
-                let nvc = (segue.destination as! UINavigationController)
-                let controller = RealmBrowserVC()
-                controller.headers = RealmController.shared.propertyNames(for: objectName)
-                controller.objects = entries
-                nvc.setViewControllers([controller], animated: false)
-                //controller.detailItem = object
-                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-                controller.navigationItem.leftItemsSupplementBackButton = true
-                detailViewController = controller
-            }
-        }
-    }
+//    // MARK: - Segues
+//
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == "showDetail" {
+//            if let indexPath = tableView.indexPathForSelectedRow {
+//                let objectName = self.objects[indexPath.row] as! String
+//                let entries = RealmController.shared.entries(for: objectName)
+//                //let object = objects[indexPath.row] as! NSDate
+//                let nvc = (segue.destination as! UINavigationController)
+//                let controller = RealmBrowserVC()
+//                controller.headers = RealmController.shared.propertyNames(for: objectName)
+//                controller.objects = entries
+//                nvc.setViewControllers([controller], animated: false)
+//                //controller.detailItem = object
+//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+//                controller.navigationItem.leftItemsSupplementBackButton = true
+//                detailViewController = controller
+//            }
+//        }
+//    }
 
     // MARK: - Table View
 
@@ -99,7 +105,27 @@ class MasterViewController: UITableViewController {
         let objectName = self.objects[indexPath.row] as! String
         let entries = RealmController.shared.entries(for: objectName)
 
-        
+        if let nvc = self.splitViewController?.viewControllers.last as? UINavigationController {
+            let controller = RealmBrowserVC()
+            controller.headers = RealmController.shared.propertyNames(for: objectName)
+            controller.objects = entries
+
+            //TODO: Differ between iPad and iPhone
+
+            detailViewController = controller
+            switch UIDevice.current.userInterfaceIdiom {
+            case .phone:
+                nvc.pushViewController(controller, animated: true)
+            case .pad:
+                nvc.setViewControllers([controller], animated: false)
+                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            default:
+                print("RIAB - Couldn't figure out how to push view")
+                return
+            }
+
+        }
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
