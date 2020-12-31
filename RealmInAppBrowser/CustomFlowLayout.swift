@@ -19,7 +19,7 @@ class NoBreakSectionCollectionViewLayout: UICollectionViewLayout {
     var layoutInfo: [IndexPath: UICollectionViewLayoutAttributes]
 
     override init() {
-      itemSize = CGSize(width: 250, height: 50)
+      itemSize = CGSize(width: 250, height: 44)
       interItemSpacingY = 1
       interItemSpacingX = 1
       layoutInfo = [IndexPath: UICollectionViewLayoutAttributes]()

@@ -51,16 +51,13 @@ class RealmBrowserVC: UIViewController {
 
 extension RealmBrowserVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if indexPath.section == 0 {
-            return CGSize(width: 200, height: 15)
+        if indexPath.row == 0 {
+            return CGSize(width: 200, height: 10)
         }
-        return CGSize(width: 200, height: 20)
+        return CGSize(width: 200, height: 10)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-
-    }
-
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 extension RealmBrowserVC: UICollectionViewDataSource {
@@ -75,72 +72,40 @@ extension RealmBrowserVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //header cell
         if indexPath.section == 0 {
-
-            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeaderCell.identifier, for: indexPath) as! HeaderCell
-            if let property = self.store?.propertyName(index: indexPath.row) {
-                cell.textLabel.text = property
+            return self.configureHeaderCell(cell: cell, indexPath: indexPath)
+        }
+        //data cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DataCell.identifier, for: indexPath) as! DataCell
+        return self.configureDataCell(cell: cell, indexPath: indexPath)
+    }
 
-                if let sortingBy = self.store?.sortingBy {
-                    if sortingBy.name == property {
-                        let arrow = sortingBy.asc == true ? " \u{2191}" : " \u{2193}"
-                        cell.textLabel.text?.append(arrow)
-                    }
-                }
+    func configureHeaderCell(cell: HeaderCell, indexPath: IndexPath) -> HeaderCell {
+        if let property = self.store?.propertyName(index: indexPath.row) {
+            cell.textLabel.text = property
+
+            if let sortingBy = self.store?.sortingBy, sortingBy.name == property  {
+                cell.ascending = sortingBy.asc
             }
-
-            cell.indexPath = indexPath
-            cell.pressedAction = { index in
-                if let index = index {
-                    //print("sort by \(self.headers[index.row])")
-                    //self.pressedSort(for: self.headers[index.row])
-                }
-            }
-
-
-
-            return cell
         }
 
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DataCell.identifier, for: indexPath) as! DataCell
-//        let object = self.objects[indexPath.section-1]
-//        let propertyName = self.headers[indexPath.row]
-//
-        cell.textLabel.text = self.store?.value(propertyIndex: indexPath.row, objectIndex: indexPath.section-1)        //print("\(indexPath.section) - \(indexPath.row)")
+        //TODO: sort
+        cell.indexPath = indexPath
+        cell.pressedAction = { index in
+            if let index = index {
+                //print("sort by \(self.headers[index.row])")
+                //self.pressedSort(for: self.headers[index.row])
+            }
+        }
+
         return cell
     }
 
-    func configureHeaderCell(cell: HeaderCell) {
-
+    func configureDataCell(cell: DataCell, indexPath: IndexPath) -> DataCell {
+        cell.textLabel.text = self.store?.value(propertyIndex: indexPath.row, objectIndex: indexPath.section-1)
+        cell.backgroundColor = (indexPath.section%2 == 0) ? .systemGray6 : .white
+        return cell
     }
-    func configureDataCell() {}
-
-    //TODO: sort need to consider the type in the future
-//    func pressedSort(for propertyName: String) {
-//        if objects.isEmpty { return }
-//
-//        var ascending = false
-//
-//        if let sortingBy = sortingBy {
-//            if sortingBy.name == propertyName {
-//                ascending = !sortingBy.asc
-//                self.sortingBy = (propertyName, ascending)
-//            } else {
-//                self.sortingBy = (propertyName, ascending)
-//            }
-//        } else {
-//            self.sortingBy = (propertyName, ascending)
-//        }
-//        //check if property exists
-//        self.objects.sort(by: {
-//            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
-//                if ascending { return val1 < val2 } else { return val1 > val2 }
-//            }
-//            return true
-//        })
-//
-//        self.collectionVC?.collectionView.reloadData()
-//    }
 }
 
 extension RealmBrowserVC: StoreDelegate {
@@ -155,19 +120,29 @@ class HeaderCell: UICollectionViewCell {
     var actionBtn: UIButton?
     var indexPath: IndexPath?
     var pressedAction: ((IndexPath?)->())?
+
+    var ascending: Bool? {
+        didSet {
+            if let ascending = ascending {
+                let arrow = (ascending == true) ? " \u{2191}" : " \u{2193}"
+                self.textLabel.text?.append(arrow)
+            }
+        }
+    }
+
     static let identifier = "HeaderCell"
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.font = UIFont.systemFont(ofSize: 20)
+        textLabel.font = UIFont.systemFont(ofSize: 14)
         contentView.addSubview(textLabel)
 
         NSLayoutConstraint.activate([
-            textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 5),
+            textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 15),
             textLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         ])
 
@@ -181,7 +156,7 @@ class HeaderCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             actionBtn.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             actionBtn.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            actionBtn.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 5),
+            actionBtn.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 15),
             actionBtn.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         ])
         
@@ -205,13 +180,13 @@ class DataCell: UICollectionViewCell {
         super.init(frame: frame)
 
         textLabel.translatesAutoresizingMaskIntoConstraints = false
-        textLabel.font = UIFont.systemFont(ofSize: 20)
+        textLabel.font = UIFont.systemFont(ofSize: 14)
         contentView.addSubview(textLabel)
 
         NSLayoutConstraint.activate([
-            textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
+            textLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             textLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 0),
-            textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
+            textLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 15),
             textLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         ])
     }
