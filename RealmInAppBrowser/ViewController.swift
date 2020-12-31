@@ -19,7 +19,7 @@ class ViewController: UIViewController {
 
     @IBAction func pressedOpen(_ sender: Any) {
 
-        let spvc = CustomSplitViewController()
+        let spvc = RealmBrowser()
         spvc.modalPresentationStyle = .fullScreen
         self.present(spvc, animated: true, completion: nil)
     }

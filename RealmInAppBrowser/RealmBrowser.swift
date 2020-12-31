@@ -9,12 +9,12 @@
 import Foundation
 import UIKit
 
-class CustomSplitViewController: UISplitViewController, UISplitViewControllerDelegate {
+class RealmBrowser: UISplitViewController, UISplitViewControllerDelegate {
 
     var masterVC: UIViewController?
     var detailVC: UIViewController?
 
-    //var pressedCloseAction: (()->())?
+    var pressedCloseAction: (()->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,8 +23,12 @@ class CustomSplitViewController: UISplitViewController, UISplitViewControllerDel
         let store = RealmStore()
         let masterVC = RealmObjectsVC(style: .plain)
         masterVC.store = store
-        masterVC.pressedCloseAction = { self.dismiss(animated: true , completion: nil) }
 
+        if pressedCloseAction != nil {
+            masterVC.pressedCloseAction = pressedCloseAction
+        } else {
+            masterVC.pressedCloseAction = { self.dismiss(animated: true , completion: nil) }
+        }
         let detailVC = RealmBrowserVC()
         detailVC.store = store
 

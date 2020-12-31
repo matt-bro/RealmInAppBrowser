@@ -21,6 +21,7 @@ class RealmBrowserVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //self.view.translatesAutoresizingMaskIntoConstraints = false
         // Do any additional setup after loading the view.
         self.view.backgroundColor = .white
 
@@ -33,6 +34,8 @@ class RealmBrowserVC: UIViewController {
         cvc.collectionView.delegate = self
         cvc.collectionView.dataSource = self
         cvc.collectionView.backgroundColor = .white
+        cvc.view.translatesAutoresizingMaskIntoConstraints = false
+
         
         self.view.addSubview(cvc.collectionView)
 
@@ -40,12 +43,27 @@ class RealmBrowserVC: UIViewController {
             cvc.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
             cvc.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
             cvc.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-            cvc.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0)
+            cvc.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 44)
         ])
 
-        self.collectionVC = cvc
+        //self.setupFilter()
 
+        self.collectionVC = cvc
         store?.delegate = self
+    }
+
+    func setupFilter() {
+        let tf = UITextField(frame: .zero)
+        tf.placeholder = "Type your query"
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(tf)
+
+        NSLayoutConstraint.activate([
+            tf.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            tf.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            tf.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            tf.heightAnchor.constraint(equalToConstant: 44.0)
+        ])
     }
 }
 

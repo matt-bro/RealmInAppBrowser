@@ -41,12 +41,23 @@
                                     <constraint firstAttribute="height" constant="200" id="zlm-i5-brh"/>
                                 </constraints>
                             </stackView>
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Sug-xP-coq">
+                                <rect key="frame" x="357" y="12" width="97" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="Trf-oK-7tN"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstItem="Sug-xP-coq" firstAttribute="leading" secondItem="BW0-gH-FUU" secondAttribute="leading" constant="357" id="IKJ-RS-EkZ"/>
                             <constraint firstItem="5Gc-3L-oJt" firstAttribute="centerX" secondItem="BW0-gH-FUU" secondAttribute="centerX" id="Qy1-yZ-MdM"/>
                             <constraint firstItem="BW0-gH-FUU" firstAttribute="trailing" secondItem="zHp-Mc-Ppi" secondAttribute="trailing" constant="700" id="YG6-WO-uqT"/>
+                            <constraint firstItem="Sug-xP-coq" firstAttribute="top" secondItem="BW0-gH-FUU" secondAttribute="top" constant="12" id="hQo-Lr-xtw"/>
                             <constraint firstItem="zHp-Mc-Ppi" firstAttribute="centerY" secondItem="BW0-gH-FUU" secondAttribute="centerY" id="kWl-cz-HfJ"/>
+                            <constraint firstItem="BW0-gH-FUU" firstAttribute="trailing" secondItem="Sug-xP-coq" secondAttribute="trailing" constant="356" id="mFZ-uT-iCv"/>
                             <constraint firstItem="5Gc-3L-oJt" firstAttribute="centerY" secondItem="BW0-gH-FUU" secondAttribute="centerY" id="nZi-9d-XeR"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="BW0-gH-FUU"/>
