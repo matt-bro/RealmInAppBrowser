@@ -11,7 +11,7 @@
 		C9100F41252F7C7400B0932E /* CustomFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9100F40252F7C7400B0932E /* CustomFlowLayout.swift */; };
 		C91EC2DC252CE20D00031B44 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91EC2DB252CE20D00031B44 /* AppDelegate.swift */; };
 		C91EC2DE252CE20D00031B44 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91EC2DD252CE20D00031B44 /* SceneDelegate.swift */; };
-		C91EC2E0252CE20D00031B44 /* MasterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91EC2DF252CE20D00031B44 /* MasterViewController.swift */; };
+		C91EC2E0252CE20D00031B44 /* RealmObjectsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91EC2DF252CE20D00031B44 /* RealmObjectsVC.swift */; };
 		C91EC2E2252CE20D00031B44 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C91EC2E1252CE20D00031B44 /* DetailViewController.swift */; };
 		C91EC2E5252CE20D00031B44 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C91EC2E3252CE20D00031B44 /* Main.storyboard */; };
 		C91EC2E7252CE20F00031B44 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C91EC2E6252CE20F00031B44 /* Assets.xcassets */; };
@@ -33,7 +33,7 @@
 		C91EC2D8252CE20D00031B44 /* RealmInAppBrowser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RealmInAppBrowser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C91EC2DB252CE20D00031B44 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C91EC2DD252CE20D00031B44 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C91EC2DF252CE20D00031B44 /* MasterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasterViewController.swift; sourceTree = "<group>"; };
+		C91EC2DF252CE20D00031B44 /* RealmObjectsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmObjectsVC.swift; sourceTree = "<group>"; };
 		C91EC2E1252CE20D00031B44 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C91EC2E4252CE20D00031B44 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C91EC2E6252CE20F00031B44 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -91,7 +91,7 @@
 			children = (
 				C91EC2DB252CE20D00031B44 /* AppDelegate.swift */,
 				C91EC2DD252CE20D00031B44 /* SceneDelegate.swift */,
-				C91EC2DF252CE20D00031B44 /* MasterViewController.swift */,
+				C91EC2DF252CE20D00031B44 /* RealmObjectsVC.swift */,
 				C91EC2E1252CE20D00031B44 /* DetailViewController.swift */,
 				C91EC2E3252CE20D00031B44 /* Main.storyboard */,
 				C91EC2E6252CE20F00031B44 /* Assets.xcassets */,
@@ -239,7 +239,7 @@
 				C92970872596A1DF00E91F94 /* RealmController.swift in Sources */,
 				C9D3370B259CC0BB008A4A42 /* ViewController.swift in Sources */,
 				C9D3370D259CDA18008A4A42 /* RealmStore.swift in Sources */,
-				C91EC2E0252CE20D00031B44 /* MasterViewController.swift in Sources */,
+				C91EC2E0252CE20D00031B44 /* RealmObjectsVC.swift in Sources */,
 				C91EC2E2252CE20D00031B44 /* DetailViewController.swift in Sources */,
 				C91EC2F2252CE45300031B44 /* ObjectsTVC.swift in Sources */,
 				C91EC2F4252CE48800031B44 /* RealmBrowserVC.swift in Sources */,

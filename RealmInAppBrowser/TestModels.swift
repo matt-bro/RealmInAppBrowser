@@ -23,3 +23,14 @@ class Person: Object {
         return "id"
     }
 }
+
+class Todo: Object {
+    @objc dynamic var id: String = ""
+    @objc dynamic var title: String = ""
+    @objc dynamic var dueDate: Date?
+    @objc dynamic var done: Bool = false
+
+    override class func primaryKey() -> String? {
+        return "id"
+    }
+}

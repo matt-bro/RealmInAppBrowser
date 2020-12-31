@@ -30,6 +30,7 @@ class RealmStore: NSObject, StoreProtocol {
     var queryObject: Any?
     private var realm: Realm?
     private var schema: Schema?
+    private var objects: [DynamicObject] = []
     weak var delegate: StoreDelegate?
     var sortingBy: (name: String, asc: Bool)?
 
@@ -69,6 +70,7 @@ class RealmStore: NSObject, StoreProtocol {
         self.loadedObjectProperties = realm.schema.objectSchema.filter({$0.className == className }).first?.properties ?? []
 
         let objects = realm.dynamicObjects(className)
+        self.objects = Array(objects)
 
         self.delegate?.didUpdate(store: self, isEmpty: objects.isEmpty, hasError: false)
     }
@@ -91,12 +93,52 @@ class RealmStore: NSObject, StoreProtocol {
 
     // MARK: LOADING AN OBJECT
     var loadedObjectProperties: [Property] = []
+
+    func propertyName(index: Int) -> String {
+        loadedObjectProperties[index].name
+    }
     var propertyCount: Int {
         loadedObjectProperties.count
     }
+    var objectCount: Int {
+        self.objects.count
+    }
 
-    func get() -> DynamicObject? {
-        nil
+    func get(index: Int) -> Property? {
+        return self.loadedObjectProperties[index]
+    }
+
+    func get(index: Int) -> DynamicObject? {
+        guard self.objects.isEmpty == false, (index >= 0 && index < self.objects.count) else {
+            return nil
+        }
+
+        return self.objects[index]
+    }
+
+    func value(propertyIndex: Int, objectIndex: Int) -> String? {
+//        guard let propertyIndex = self.loadedObjectProperties.map({$0.name}).firstIndex(of: propertyName) else {
+//            return nil
+//        }
+        let property = self.loadedObjectProperties[propertyIndex]
+        let object = self.objects[objectIndex]
+
+        switch property.type {
+        case .bool:
+            if let value = object.value(forKey: property.name) as? Bool {
+                return value.description
+            }
+        case .date:
+            if let value = object.value(forKey: property.name) as? Date {
+                return value.description
+            }
+        default:
+            if let value = object.value(forKey: property.name) as? String {
+                return value.description
+            }
+        }
+
+        return nil
     }
 
     //TODO: sort need to consider the type in the future

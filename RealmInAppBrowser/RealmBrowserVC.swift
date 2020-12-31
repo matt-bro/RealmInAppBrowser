@@ -12,7 +12,8 @@ import RealmSwift
 class RealmBrowserVC: UIViewController {
 
     var headers:[String] = []
-    var objects:[DynamicObject] = []
+    //var objects:[DynamicObject] = []
+    var store: RealmStore?
     var collectionVC: UICollectionViewController?
 
     var sortingBy: (name: String, asc: Bool)?
@@ -44,6 +45,7 @@ class RealmBrowserVC: UIViewController {
 
         self.collectionVC = cvc
 
+        store?.delegate = self
     }
 }
 
@@ -63,72 +65,86 @@ extension RealmBrowserVC: UICollectionViewDelegate, UICollectionViewDelegateFlow
 
 extension RealmBrowserVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.headers.count
+        return self.store?.propertyCount ?? 0
     }
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.objects.count+1
+        return (self.store?.objectCount ?? 0)+1
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        //header cell
         if indexPath.section == 0 {
+
+            
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeaderCell.identifier, for: indexPath) as! HeaderCell
-            let property = headers[indexPath.row]
-            cell.textLabel.text = property
-            cell.indexPath = indexPath
-            cell.pressedAction = { index in
-                if let index = index {
-                    print("sort by \(self.headers[index.row])")
-                    self.pressedSort(for: self.headers[index.row])
+            if let property = self.store?.propertyName(index: indexPath.row) {
+                cell.textLabel.text = property
+
+                if let sortingBy = self.store?.sortingBy {
+                    if sortingBy.name == property {
+                        let arrow = sortingBy.asc == true ? " \u{2191}" : " \u{2193}"
+                        cell.textLabel.text?.append(arrow)
+                    }
                 }
             }
 
-            if let sortingBy = self.sortingBy {
-                if sortingBy.name == property {
-                    let arrow = sortingBy.asc == true ? " \u{2191}" : " \u{2193}"
-                    cell.textLabel.text?.append(arrow)
+            cell.indexPath = indexPath
+            cell.pressedAction = { index in
+                if let index = index {
+                    //print("sort by \(self.headers[index.row])")
+                    //self.pressedSort(for: self.headers[index.row])
                 }
             }
+
+
 
             return cell
         }
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DataCell.identifier, for: indexPath) as! DataCell
-        let object = self.objects[indexPath.section-1]
-        let propertyName = self.headers[indexPath.row]
-
-        cell.textLabel.text = object.value(forUndefinedKey: propertyName) as? String ?? ""
-        //print("\(indexPath.section) - \(indexPath.row)")
+//        let object = self.objects[indexPath.section-1]
+//        let propertyName = self.headers[indexPath.row]
+//
+        cell.textLabel.text = self.store?.value(propertyIndex: indexPath.row, objectIndex: indexPath.section-1)        //print("\(indexPath.section) - \(indexPath.row)")
         return cell
     }
 
-    func configureHeaderCell() {}
+    func configureHeaderCell(cell: HeaderCell) {
+
+    }
     func configureDataCell() {}
 
     //TODO: sort need to consider the type in the future
-    func pressedSort(for propertyName: String) {
-        if objects.isEmpty { return }
+//    func pressedSort(for propertyName: String) {
+//        if objects.isEmpty { return }
+//
+//        var ascending = false
+//
+//        if let sortingBy = sortingBy {
+//            if sortingBy.name == propertyName {
+//                ascending = !sortingBy.asc
+//                self.sortingBy = (propertyName, ascending)
+//            } else {
+//                self.sortingBy = (propertyName, ascending)
+//            }
+//        } else {
+//            self.sortingBy = (propertyName, ascending)
+//        }
+//        //check if property exists
+//        self.objects.sort(by: {
+//            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
+//                if ascending { return val1 < val2 } else { return val1 > val2 }
+//            }
+//            return true
+//        })
+//
+//        self.collectionVC?.collectionView.reloadData()
+//    }
+}
 
-        var ascending = false
-
-        if let sortingBy = sortingBy {
-            if sortingBy.name == propertyName {
-                ascending = !sortingBy.asc
-                self.sortingBy = (propertyName, ascending)
-            } else {
-                self.sortingBy = (propertyName, ascending)
-            }
-        } else {
-            self.sortingBy = (propertyName, ascending)
-        }
-        //check if property exists
-        self.objects.sort(by: {
-            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
-                if ascending { return val1 < val2 } else { return val1 > val2 }
-            }
-            return true
-        })
-
+extension RealmBrowserVC: StoreDelegate {
+    func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool) {
         self.collectionVC?.collectionView.reloadData()
     }
 }

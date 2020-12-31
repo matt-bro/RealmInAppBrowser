@@ -14,12 +14,19 @@ class CustomSplitViewController: UISplitViewController, UISplitViewControllerDel
     var masterVC: UIViewController?
     var detailVC: UIViewController?
 
+    //var pressedCloseAction: (()->())?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         preferredDisplayMode = .allVisible
 
-        let masterVC = MasterViewController(style: .plain)
+        let store = RealmStore()
+        let masterVC = RealmObjectsVC(style: .plain)
+        masterVC.store = store
+        masterVC.pressedCloseAction = { self.dismiss(animated: true , completion: nil) }
+
         let detailVC = RealmBrowserVC()
+        detailVC.store = store
 
         self.masterVC = masterVC
         self.detailVC = detailVC

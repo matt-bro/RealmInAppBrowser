@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate, UISplitViewControllerDelegate {
 
@@ -20,11 +21,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate, UISplitViewControllerDe
         guard let window = window else { return }
 
         //RealmController.shared.entries(for: "Person")
-
-              let store = RealmStore()
-              let schema = store.get(schema: 0)
-              print(schema?.className)
-              print(store.classNames)
+//
+//        let store = RealmStore()
+//        let schema = store.schema(index: 0)
+//        print(schema?.className)
+//        print(store.classNames)
 
         guard let splitViewController = window.rootViewController as? UISplitViewController else { return }
         guard let navigationController = splitViewController.viewControllers.last as? UINavigationController else { return }

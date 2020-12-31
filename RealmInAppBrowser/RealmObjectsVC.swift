@@ -1,5 +1,5 @@
 //
-//  MasterViewController.swift
+//  RealmObjectsVC.swift
 //  RealmInAppBrowser
 //
 //  Created by Matt on 06.10.20.
@@ -9,34 +9,30 @@
 import UIKit
 import RealmSwift
 
-class MasterViewController: UITableViewController {
+class RealmObjectsVC: UITableViewController {
 
-    var detailViewController: UIViewController? = nil
     var store: RealmStore? {
         didSet {
             self.store?.update()
             self.tableView.reloadData()
         }
     }
-    var objects = [Any]()
 
+    var closeBtn: UIBarButtonItem {
+        UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(pressedClose(_:)))
+    }
+
+    var pressedCloseAction:(()->())?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        navigationItem.leftBarButtonItem = editButtonItem
+        navigationItem.leftBarButtonItem = closeBtn
 
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
         navigationItem.rightBarButtonItem = addButton
-        if let split = splitViewController {
-            let controllers = split.viewControllers
-            detailViewController = (controllers[controllers.count-1] as! UINavigationController).topViewController as? RealmBrowserVC
-        }
 
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
-        RealmController.shared.tables()
-        self.objects = RealmController.shared.objectNames
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -46,10 +42,6 @@ class MasterViewController: UITableViewController {
 
     @objc
     func insertNewObject(_ sender: Any) {
-//        objects.insert(NSDate(), at: 0)
-//        let indexPath = IndexPath(row: 0, section: 0)
-//        tableView.insertRows(at: [indexPath], with: .automatic)
-
         let realm = try! Realm()
 
         let object = Person()
@@ -61,36 +53,24 @@ class MasterViewController: UITableViewController {
         object.phone = "+00 \(Int.random(in: 10000...99999))"
         object.mobile = "+00 \(Int.random(in: 10000...99999))"
         object.birthdate = Date()
+
+
+        let todo = Todo()
+        todo.id = "\(randomNumber)"
+        todo.title = "Title \(Int.random(in: 100...999))"
+        todo.dueDate = Date()
+        todo.done = (randomNumber > 5000)
+
         try! realm.write {
             realm.add(object)
+            realm.add(todo)
         }
-
         self.tableView.reloadData()
-
     }
 
-//    // MARK: - Segues
-//
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "showDetail" {
-//            if let indexPath = tableView.indexPathForSelectedRow {
-//                let objectName = self.objects[indexPath.row] as! String
-//                let entries = RealmController.shared.entries(for: objectName)
-//                //let object = objects[indexPath.row] as! NSDate
-//                let nvc = (segue.destination as! UINavigationController)
-//                let controller = RealmBrowserVC()
-//                controller.headers = RealmController.shared.propertyNames(for: objectName)
-//                controller.objects = entries
-//                nvc.setViewControllers([controller], animated: false)
-//                //controller.detailItem = object
-//                controller.navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
-//                controller.navigationItem.leftItemsSupplementBackButton = true
-//                detailViewController = controller
-//            }
-//        }
-//    }
-
-    // MARK: - Table View
+    @objc func pressedClose(_ sender: UIBarButtonItem) {
+        self.pressedCloseAction?()
+    }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -108,17 +88,18 @@ class MasterViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let objectName = self.objects[indexPath.row] as! String
-        let entries = RealmController.shared.entries(for: objectName)
+        guard let objectName = self.store?.className(index: indexPath.row) else {
+            return
+        }
+
+        store?.queryObject = objectName
+        store?.update()
+        //let entries = RealmController.shared.entries(for: objectName)
 
         if let nvc = self.splitViewController?.viewControllers.last as? UINavigationController {
             let controller = RealmBrowserVC()
-            controller.headers = RealmController.shared.propertyNames(for: objectName)
-            controller.objects = entries
-
+            controller.store = store
             //TODO: Differ between iPad and iPhone
-
-            detailViewController = controller
             switch UIDevice.current.userInterfaceIdiom {
             case .phone:
                 nvc.pushViewController(controller, animated: true)
@@ -130,24 +111,7 @@ class MasterViewController: UITableViewController {
                 print("RIAB - Couldn't figure out how to push view")
                 return
             }
-
         }
     }
-
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            objects.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
-        }
-    }
-
-
 }
 
