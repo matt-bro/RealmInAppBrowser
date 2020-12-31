@@ -17,7 +17,7 @@
   <a href="#license">License</a>
 </p>
 <p align="center">
-<img src="https://raw.githubusercontent.com/matt-bro/RealmInAppBrowser/main/readme-assets/screenshot.png" width="225" height="400">
+<img src="https://raw.githubusercontent.com/matt-bro/RealmInAppBrowser/main/readme-assets/screenshot.png" width="445" height="334">
 </p>
 
 ## Description
