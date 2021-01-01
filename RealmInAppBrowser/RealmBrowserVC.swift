@@ -62,6 +62,11 @@ class RealmBrowserVC: UIViewController {
         tf.placeholder = " Type your query"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.delegate = self
+        tf.autocorrectionType = .no
+        tf.autocapitalizationType = .none
+        tf.smartDashesType = .no
+        tf.smartQuotesType = .no
+        tf.smartInsertDeleteType = .no
         self.view.addSubview(tf)
         self.filterTf = tf
 
@@ -72,7 +77,13 @@ class RealmBrowserVC: UIViewController {
         searchBtn.backgroundColor = .systemTeal
         searchBtn.addTarget(self, action:#selector(pressedFilter) , for: .touchUpInside)
 
-        let stackview = UIStackView(arrangedSubviews: [tf, searchBtn])
+        let resetBtn = UIButton(type: .custom)
+        resetBtn.translatesAutoresizingMaskIntoConstraints = false
+        resetBtn.setTitle("Reset", for: .normal)
+        resetBtn.backgroundColor = .systemGray5
+        resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
+
+        let stackview = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
         stackview.axis = .horizontal
         stackview.alignment = .fill
         stackview.distribution = .fill
@@ -92,7 +103,13 @@ class RealmBrowserVC: UIViewController {
 
     @objc func pressedFilter() {
         self.filterTf?.resignFirstResponder()
+        self.store?.filter(query: self.filterTf?.text ?? "")
         print("pressed filter with query \(self.filterTf?.text)")
+    }
+
+    @objc func pressedResetFilter() {
+        self.filterTf?.text = ""
+        self.store?.resetFilter()
     }
 }
 

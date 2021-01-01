@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class RealmBrowser: UISplitViewController, UISplitViewControllerDelegate {
+class RealmInAppBrowser: UISplitViewController, UISplitViewControllerDelegate {
 
     var masterVC: UIViewController?
     var detailVC: UIViewController?

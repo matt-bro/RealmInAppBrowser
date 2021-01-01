@@ -41,8 +41,8 @@ The goal of this project is that the browser would roughly work like Realm Brows
 Clone this application and install pods
 
 ```swift
-// Init Realm Browser (It's a UISplitViewController)
-let spvc = RealmBrowser()
+// Init Realm InAppBrowser (It's a UISplitViewController)
+let spvc = RealmInAppBrowser()
 // Present the Browser how you like
 spvc.modalPresentationStyle = .fullScreen
 // Define what happens when the users presses close

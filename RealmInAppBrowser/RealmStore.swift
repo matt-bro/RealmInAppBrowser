@@ -31,6 +31,11 @@ class RealmStore: NSObject, StoreProtocol {
     private var realm: Realm?
     private var schema: Schema?
     private var objects: [DynamicObject] = []
+    private var filteredObjects: [DynamicObject] = []
+    var isFiltering: Bool {
+        return filteredObjects.isEmpty == false
+    }
+    private var results: Results<DynamicObject>?
     weak var delegate: StoreDelegate?
     var sortingBy: (name: String, asc: Bool)?
 
@@ -67,10 +72,12 @@ class RealmStore: NSObject, StoreProtocol {
 
         guard let realm = realm, let className = queryObject as? String else { return }
 
+        self.filteredObjects = []
         self.loadedObjectProperties = realm.schema.objectSchema.filter({$0.className == className }).first?.properties ?? []
 
         let objects = realm.dynamicObjects(className)
         self.objects = Array(objects)
+        self.results = objects
 
         self.delegate?.didUpdate(store: self, isEmpty: objects.isEmpty, hasError: false)
     }
@@ -101,7 +108,10 @@ class RealmStore: NSObject, StoreProtocol {
         loadedObjectProperties.count
     }
     var objectCount: Int {
-        self.objects.count
+        if isFiltering {
+            return self.filteredObjects.count
+        }
+        return self.objects.count
     }
 
     func get(index: Int) -> Property? {
@@ -113,6 +123,10 @@ class RealmStore: NSObject, StoreProtocol {
             return nil
         }
 
+        if isFiltering {
+            return self.filteredObjects[index]
+        }
+
         return self.objects[index]
     }
 
@@ -121,7 +135,10 @@ class RealmStore: NSObject, StoreProtocol {
 //            return nil
 //        }
         let property = self.loadedObjectProperties[propertyIndex]
-        let object = self.objects[objectIndex]
+        var object = self.objects[objectIndex]
+        if isFiltering {
+            object = self.filteredObjects[objectIndex]
+        }
 
         switch property.type {
         case .bool:
@@ -168,8 +185,21 @@ class RealmStore: NSObject, StoreProtocol {
 //        self.collectionVC?.collectionView.reloadData()
 //    }
 
-    func filter() {
+    func filter(query: String) {
+        guard let results = results else {
+            return
+        }
 
+        tryBlock {
+            self.filteredObjects = Array(results.filter(query))
+            self.delegate?.didUpdate(store: self, isEmpty: self.objects.isEmpty, hasError: false)
+        }
+    }
+
+
+    func resetFilter() {
+        self.filteredObjects = []
+        self.delegate?.didUpdate(store: self, isEmpty: self.objects.isEmpty, hasError: false)
     }
 
 }
