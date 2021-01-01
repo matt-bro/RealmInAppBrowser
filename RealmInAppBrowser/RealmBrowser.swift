@@ -35,7 +35,9 @@ class RealmInAppBrowser: UISplitViewController, UISplitViewControllerDelegate {
         self.masterVC = masterVC
         self.detailVC = detailVC
 
-        self.viewControllers = [UINavigationController(rootViewController: masterVC), UINavigationController(rootViewController: detailVC)]
+        let detailNVC = UINavigationController(rootViewController: detailVC)
+        detailNVC.setNavigationBarHidden(true, animated: false)
+        self.viewControllers = [UINavigationController(rootViewController: masterVC), detailNVC]
 
         self.delegate = self
         self.preferredDisplayMode = .allVisible

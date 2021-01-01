@@ -18,11 +18,13 @@ protocol StoreProtocol {
 protocol StoreDelegate: class {
     func willUpdate(store: StoreProtocol)
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool)
+    func didFilter(withError: String)
 }
 
 extension StoreDelegate {
     func willUpdate(store: StoreProtocol) {}
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool) {}
+    func didFilter(withError: String) {}
 }
 
 class RealmStore: NSObject, StoreProtocol {
@@ -190,9 +192,13 @@ class RealmStore: NSObject, StoreProtocol {
             return
         }
 
-        tryBlock {
+        let exception = tryBlock {
             self.filteredObjects = Array(results.filter(query))
             self.delegate?.didUpdate(store: self, isEmpty: self.objects.isEmpty, hasError: false)
+        }
+
+        if exception != nil {
+            self.delegate?.didFilter(withError: exception?.reason ?? "")
         }
     }
 
