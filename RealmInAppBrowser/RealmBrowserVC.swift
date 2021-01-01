@@ -18,12 +18,15 @@ class RealmBrowserVC: UIViewController {
 
     var sortingBy: (name: String, asc: Bool)?
 
+    var filterTf: UITextField?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         //self.view.translatesAutoresizingMaskIntoConstraints = false
         // Do any additional setup after loading the view.
         self.view.backgroundColor = .white
+
 
         let flowLayout = NoBreakSectionCollectionViewLayout()
         //flowLayout.minimumLineSpacing = 10
@@ -34,36 +37,81 @@ class RealmBrowserVC: UIViewController {
         cvc.collectionView.delegate = self
         cvc.collectionView.dataSource = self
         cvc.collectionView.backgroundColor = .white
-        cvc.view.translatesAutoresizingMaskIntoConstraints = false
+        cvc.collectionView.translatesAutoresizingMaskIntoConstraints = false
 
         
         self.view.addSubview(cvc.collectionView)
 
         NSLayoutConstraint.activate([
-            cvc.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
-            cvc.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
-            cvc.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
-            cvc.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 44)
+            cvc.collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            cvc.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            cvc.collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            cvc.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:44)
         ])
 
-        //self.setupFilter()
+        self.setupFilter()
 
         self.collectionVC = cvc
         store?.delegate = self
     }
 
     func setupFilter() {
+
+
         let tf = UITextField(frame: .zero)
-        tf.placeholder = "Type your query"
+        tf.placeholder = " Type your query"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.delegate = self
         self.view.addSubview(tf)
+        self.filterTf = tf
+
+
+        let searchBtn = UIButton(type: .custom)
+        searchBtn.translatesAutoresizingMaskIntoConstraints = false
+        searchBtn.setTitle("Filter", for: .normal)
+        searchBtn.backgroundColor = .systemTeal
+        searchBtn.addTarget(self, action:#selector(pressedFilter) , for: .touchUpInside)
+
+        let stackview = UIStackView(arrangedSubviews: [tf, searchBtn])
+        stackview.axis = .horizontal
+        stackview.alignment = .fill
+        stackview.distribution = .fill
+        stackview.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(stackview)
+        NSLayoutConstraint.activate([
+            stackview.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            stackview.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            stackview.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            stackview.heightAnchor.constraint(equalToConstant: 44)
+        ])
 
         NSLayoutConstraint.activate([
-            tf.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            tf.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            tf.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            tf.heightAnchor.constraint(equalToConstant: 44.0)
+            searchBtn.widthAnchor.constraint(equalToConstant: 50)
         ])
+    }
+
+    @objc func pressedFilter() {
+        self.filterTf?.resignFirstResponder()
+        print("pressed filter with query \(self.filterTf?.text)")
+    }
+}
+
+extension RealmBrowserVC: UITextFieldDelegate {
+    func textFieldDidEndEditing(_ textField: UITextField) {
+
+    }
+
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        let newText = textField.text?.appending(string)
+//        if let filterTf = filterTf, (textField == self.filterTf) {
+//
+//        }
+        return true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.pressedFilter()
+        return textField.resignFirstResponder()
     }
 }
 
