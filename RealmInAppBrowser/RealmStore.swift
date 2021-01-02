@@ -74,7 +74,7 @@ class RealmStore: NSObject, StoreProtocol {
 
         guard let realm = realm, let className = queryObject as? String else { return }
 
-        self.filteredObjects = []
+        self.reset()
         self.loadedObjectProperties = realm.schema.objectSchema.filter({$0.className == className }).first?.properties ?? []
 
         let objects = realm.dynamicObjects(className)
@@ -82,6 +82,14 @@ class RealmStore: NSObject, StoreProtocol {
         self.results = objects
 
         self.delegate?.didUpdate(store: self, isEmpty: objects.isEmpty, hasError: false)
+    }
+
+    func reset() {
+        self.sortingBy = nil
+        self.filteredObjects = []
+        self.objects = []
+        self.loadedObjectProperties = []
+        self.loadedObjectProperties = []
     }
 
     func schema(index: Int) -> ObjectSchema? {
@@ -161,31 +169,39 @@ class RealmStore: NSObject, StoreProtocol {
     }
 
     //TODO: sort need to consider the type in the future
-//    func sort(for propertyName: String) {
-//        if objects.isEmpty { return }
-//
-//        var ascending = false
-//
-//        if let sortingBy = sortingBy {
-//            if sortingBy.name == propertyName {
-//                ascending = !sortingBy.asc
-//                self.sortingBy = (propertyName, ascending)
-//            } else {
-//                self.sortingBy = (propertyName, ascending)
-//            }
-//        } else {
-//            self.sortingBy = (propertyName, ascending)
-//        }
-//        //check if property exists
-//        self.objects.sort(by: {
-//            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
-//                if ascending { return val1 < val2 } else { return val1 > val2 }
-//            }
-//            return true
-//        })
-//
-//        self.collectionVC?.collectionView.reloadData()
-//    }
+    func sort(for propertyName: String) {
+        var objects = isFiltering ? self.filteredObjects : self.objects
+
+        if objects.isEmpty { return }
+
+        var ascending = false
+
+        if let sortingBy = sortingBy {
+            if sortingBy.name == propertyName {
+                ascending = !sortingBy.asc
+                self.sortingBy = (propertyName, ascending)
+            } else {
+                self.sortingBy = (propertyName, ascending)
+            }
+        } else {
+            self.sortingBy = (propertyName, ascending)
+        }
+        //check if property exists
+        objects.sort(by: {
+            if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
+                if ascending { return val1 < val2 } else { return val1 > val2 }
+            }
+            return true
+        })
+
+        if isFiltering {
+            self.filteredObjects = objects
+        } else {
+            self.objects = objects
+        }
+
+        self.delegate?.didUpdate(store: self, isEmpty: objects.isEmpty, hasError: false)
+    }
 
     func filter(query: String) {
         guard let results = results else {
@@ -194,7 +210,7 @@ class RealmStore: NSObject, StoreProtocol {
 
         let exception = tryBlock {
             self.filteredObjects = Array(results.filter(query))
-            self.delegate?.didUpdate(store: self, isEmpty: self.objects.isEmpty, hasError: false)
+            self.delegate?.didUpdate(store: self, isEmpty: self.filteredObjects.isEmpty, hasError: false)
         }
 
         if exception != nil {

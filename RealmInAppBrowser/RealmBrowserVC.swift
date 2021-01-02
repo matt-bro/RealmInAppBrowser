@@ -46,7 +46,7 @@ class RealmBrowserVC: UIViewController {
             cvc.collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
             cvc.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
             cvc.collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            cvc.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:44)
+            cvc.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:60)
         ])
 
         self.setupFilter()
@@ -83,17 +83,20 @@ class RealmBrowserVC: UIViewController {
         resetBtn.backgroundColor = .systemGray5
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
 
-        let stackview = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
-        stackview.axis = .horizontal
-        stackview.alignment = .fill
-        stackview.distribution = .fill
-        stackview.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(stackview)
+        let stackView = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 20, bottom: 5, right: 20)
+        stackView.isLayoutMarginsRelativeArrangement = true
+        self.view.addSubview(stackView)
+
         NSLayoutConstraint.activate([
-            stackview.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            stackview.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            stackview.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            stackview.heightAnchor.constraint(equalToConstant: 44)
+            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            stackView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            stackView.heightAnchor.constraint(equalToConstant: 60)
         ])
 
         NSLayoutConstraint.activate([
@@ -104,7 +107,7 @@ class RealmBrowserVC: UIViewController {
     @objc func pressedFilter() {
         self.filterTf?.resignFirstResponder()
         self.store?.filter(query: self.filterTf?.text ?? "")
-        print("pressed filter with query \(self.filterTf?.text)")
+        print("pressed filter with query \(self.filterTf?.text ?? "")")
     }
 
     @objc func pressedResetFilter() {
@@ -178,6 +181,9 @@ extension RealmBrowserVC: UICollectionViewDataSource {
             if let index = index {
                 //print("sort by \(self.headers[index.row])")
                 //self.pressedSort(for: self.headers[index.row])
+                if let property: Property = self.store?.get(index: index.row) {
+                    self.store?.sort(for: property.name)
+                }
             }
         }
 
