@@ -73,30 +73,45 @@ class RealmBrowserVC: UIViewController {
 
         let searchBtn = UIButton(type: .custom)
         searchBtn.translatesAutoresizingMaskIntoConstraints = false
-        searchBtn.setTitle("Filter", for: .normal)
-        searchBtn.backgroundColor = .systemTeal
+        searchBtn.setTitle(" Filter ", for: .normal)
+        searchBtn.backgroundColor = UIColor(red: 0.235, green: 0.278, blue: 0.482, alpha: 1.0)
+        searchBtn.layer.cornerRadius = 5.0
         searchBtn.addTarget(self, action:#selector(pressedFilter) , for: .touchUpInside)
 
         let resetBtn = UIButton(type: .custom)
         resetBtn.translatesAutoresizingMaskIntoConstraints = false
-        resetBtn.setTitle("Reset", for: .normal)
-        resetBtn.backgroundColor = .systemGray5
+        resetBtn.setTitle(" Reset ", for: .normal)
+        resetBtn.backgroundColor = .systemGray4
+        resetBtn.layer.cornerRadius = 5.0
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
+
+
+        let container = UIView(frame: .zero)
+        container.backgroundColor = .systemGray6
+        container.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(container)
+        NSLayoutConstraint.activate([
+            container.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            container.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            container.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            container.heightAnchor.constraint(equalToConstant: 60)
+        ])
 
         let stackView = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
+        stackView.spacing = 5
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.layoutMargins = UIEdgeInsets(top: 5, left: 20, bottom: 5, right: 20)
         stackView.isLayoutMarginsRelativeArrangement = true
-        self.view.addSubview(stackView)
+        container.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            stackView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            stackView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            stackView.heightAnchor.constraint(equalToConstant: 60)
+            stackView.topAnchor.constraint(equalTo: container.safeAreaLayoutGuide.topAnchor, constant: 0),
+            stackView.leadingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            stackView.heightAnchor.constraint(equalTo: container.safeAreaLayoutGuide.heightAnchor, constant: 0)
         ])
 
         NSLayoutConstraint.activate([

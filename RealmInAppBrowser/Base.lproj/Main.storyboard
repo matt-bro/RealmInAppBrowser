@@ -28,7 +28,7 @@
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W3c-aL-08n">
                                         <rect key="frame" x="0.0" y="0.0" width="110" height="100"/>
-                                        <color key="backgroundColor" red="0.2349476814" green="0.27953660489999999" blue="0.48237472770000001" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                        <color key="backgroundColor" red="0.23529411764705882" green="0.27843137254901962" blue="0.4823529411764706" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="H7h-sd-fkd">
                                         <rect key="frame" x="0.0" y="100" width="110" height="100"/>
