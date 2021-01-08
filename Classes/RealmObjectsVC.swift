@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class RealmObjectsVC: UITableViewController {
+internal class RealmObjectsVC: UITableViewController {
 
     var store: RealmStore? {
         didSet {
@@ -41,32 +41,32 @@ class RealmObjectsVC: UITableViewController {
     }
 
     @objc
-    func insertNewObject(_ sender: Any) {
-        let realm = try! Realm()
+        func insertNewObject(_ sender: Any) {
+            let realm = try! Realm()
 
-        let object = Person()
-        let randomNumber = Int.random(in: 1000...9999)
-        object.id = "\(randomNumber)"
-        object.firstName = "firstName \(randomNumber)"
-        object.lastName = "lastName \(randomNumber)"
-        object.address = "Address \(Int.random(in: 100...999))"
-        object.phone = "+00 \(Int.random(in: 10000...99999))"
-        object.mobile = "+00 \(Int.random(in: 10000...99999))"
-        object.birthdate = Date()
+            let object = Person()
+            let randomNumber = Int.random(in: 1000...9999)
+            object.id = "\(randomNumber)"
+            object.firstName = "firstName \(randomNumber)"
+            object.lastName = "lastName \(randomNumber)"
+            object.address = "Address \(Int.random(in: 100...999))"
+            object.phone = "+00 \(Int.random(in: 10000...99999))"
+            object.mobile = "+00 \(Int.random(in: 10000...99999))"
+            object.birthdate = Date()
 
 
-        let todo = Todo()
-        todo.id = "\(randomNumber)"
-        todo.title = "Title \(Int.random(in: 100...999))"
-        todo.dueDate = Date()
-        todo.done = (randomNumber > 5000)
+            let todo = Todo()
+            todo.id = "\(randomNumber)"
+            todo.title = "Title \(Int.random(in: 100...999))"
+            todo.dueDate = Date()
+            todo.done = (randomNumber > 5000)
 
-        try! realm.write {
-            realm.add(object)
-            realm.add(todo)
+            try! realm.write {
+                realm.add(object)
+                realm.add(todo)
+            }
+            self.tableView.reloadData()
         }
-        self.tableView.reloadData()
-    }
 
     @objc func pressedClose(_ sender: UIBarButtonItem) {
         self.pressedCloseAction?()
