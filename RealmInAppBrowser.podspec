@@ -36,8 +36,10 @@ TODO: Add long description of the pod here.
   #   'RealmInAppBrowser' => ['RealmInAppBrowser/Assets/*.png']
   # }
 
-  s.public_header_files = 'Classes/**/*.h'
+  #s.preserve_path = "${POD_ROOT}/Classes/RealmInAppBrowser.h"
+  #s.xcconfig = { 'SWIFT_OBJC_BRIDGING_HEADER' => '${POD_ROOT}/Classes/RealmInAppBrowser.h' }
+  #s.public_header_files = '${POD_ROOT}/Classes/RealmInAppBrowser.h'
   # s.frameworks = 'UIKit', 'MapKit'
   s.dependency 'Realm'
-   s.dependency 'RealmSwift', '>= 4.4.1'
+  s.dependency 'RealmSwift', '>= 4.4.1'
 end

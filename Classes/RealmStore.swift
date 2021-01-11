@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 
+
 internal protocol StoreProtocol {
     var queryObject: Any? {get set}
     var delegate: StoreDelegate? {get set}
@@ -204,6 +205,10 @@ internal class RealmStore: NSObject, StoreProtocol {
             return
         }
 
+        // TODO: try to validate query and handle exception
+        // can't use bridging header in pods
+        self.filteredObjects = Array(results.filter(query))
+        self.delegate?.didUpdate(store: self, isEmpty: self.filteredObjects.isEmpty, hasError: false)
 //        do {
 //            try ObjC.catchException {
 //                self.filteredObjects = Array(results.filter(query))
