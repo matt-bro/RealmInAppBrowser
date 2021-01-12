@@ -7,7 +7,7 @@
 
 <h1 align="center">
   <br>
-  <img src="https://raw.githubusercontent.com/matt-bro/RealmInAppBrowser/main/readme-assets/example.gif" alt="App Icon" width="200">
+  <img src="https://raw.githubusercontent.com/matt-bro/RealmInAppBrowser/main/readme-assets/example.gif" alt="App Icon" width="300">
   <br>
   Realm In App Browser
   <br>

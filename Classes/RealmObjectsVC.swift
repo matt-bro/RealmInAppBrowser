@@ -33,10 +33,12 @@ internal class RealmObjectsVC: UITableViewController {
         navigationItem.rightBarButtonItem = addButton
 
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        self.setup()
     }
 
     func setup() {
-        self.tableView.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        self.tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 0)
+        //self.tableView.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
     }
 
     override func viewWillAppear(_ animated: Bool) {
