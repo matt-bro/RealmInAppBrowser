@@ -9,14 +9,14 @@
 import Foundation
 import UIKit
 
-class RealmInAppBrowser: UISplitViewController, UISplitViewControllerDelegate {
+public class RealmInAppBrowser: UISplitViewController, UISplitViewControllerDelegate {
 
     var masterVC: UIViewController?
     var detailVC: UIViewController?
 
     var pressedCloseAction: (()->())?
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         preferredDisplayMode = .allVisible
 
@@ -43,7 +43,7 @@ class RealmInAppBrowser: UISplitViewController, UISplitViewControllerDelegate {
         self.preferredDisplayMode = .allVisible
     }
 
-    func splitViewController(
+    public func splitViewController(
              _ splitViewController: UISplitViewController,
              collapseSecondary secondaryViewController: UIViewController,
              onto primaryViewController: UIViewController) -> Bool {

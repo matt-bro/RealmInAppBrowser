@@ -9,25 +9,26 @@
 import UIKit
 import RealmSwift
 
-protocol StoreProtocol {
+
+internal protocol StoreProtocol {
     var queryObject: Any? {get set}
     var delegate: StoreDelegate? {get set}
     func update()
 }
 
-protocol StoreDelegate: class {
+internal protocol StoreDelegate: class {
     func willUpdate(store: StoreProtocol)
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool)
     func didFilter(withError: String)
 }
 
-extension StoreDelegate {
+internal extension StoreDelegate {
     func willUpdate(store: StoreProtocol) {}
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool) {}
     func didFilter(withError: String) {}
 }
 
-class RealmStore: NSObject, StoreProtocol {
+internal class RealmStore: NSObject, StoreProtocol {
 
     var queryObject: Any?
     private var realm: Realm?
@@ -141,9 +142,6 @@ class RealmStore: NSObject, StoreProtocol {
     }
 
     func value(propertyIndex: Int, objectIndex: Int) -> String? {
-//        guard let propertyIndex = self.loadedObjectProperties.map({$0.name}).firstIndex(of: propertyName) else {
-//            return nil
-//        }
         let property = self.loadedObjectProperties[propertyIndex]
         var object = self.objects[objectIndex]
         if isFiltering {
@@ -159,16 +157,27 @@ class RealmStore: NSObject, StoreProtocol {
             if let value = object.value(forKey: property.name) as? Date {
                 return value.description
             }
+        //case .linkingObjects, .object, .objectId:
+            // TODO: enable relations
+//            if let value = object.value(forKey: property.name) as? Object {
+//                return value.description
+//            }
+//
+//            if let value = object.value(forKey: property.name) as? List<RealmCollectionValue> {
+//                return value.description
+//            }
+
+
         default:
             if let value = object.value(forKey: property.name) as? String {
                 return value.description
             }
         }
 
+
         return nil
     }
 
-    //TODO: sort need to consider the type in the future
     func sort(for propertyName: String) {
         var objects = isFiltering ? self.filteredObjects : self.objects
 
@@ -186,7 +195,7 @@ class RealmStore: NSObject, StoreProtocol {
         } else {
             self.sortingBy = (propertyName, ascending)
         }
-        //check if property exists
+
         objects.sort(by: {
             if let val1 = $0.value(forUndefinedKey: propertyName) as? String, let val2 = $1.value(forUndefinedKey: propertyName) as? String {
                 if ascending { return val1 < val2 } else { return val1 > val2 }
@@ -208,14 +217,19 @@ class RealmStore: NSObject, StoreProtocol {
             return
         }
 
-        let exception = tryBlock {
-            self.filteredObjects = Array(results.filter(query))
-            self.delegate?.didUpdate(store: self, isEmpty: self.filteredObjects.isEmpty, hasError: false)
-        }
+        // TODO: try to validate query and handle exception
+        // can't use bridging header in pods
+        self.filteredObjects = Array(results.filter(query))
+        self.delegate?.didUpdate(store: self, isEmpty: self.filteredObjects.isEmpty, hasError: false)
+//        do {
+//            try ObjC.catchException {
+//                self.filteredObjects = Array(results.filter(query))
+//                self.delegate?.didUpdate(store: self, isEmpty: self.filteredObjects.isEmpty, hasError: false)
+//            }
+//        } catch {
+//            self.delegate?.didFilter(withError: error.localizedDescription )
+//        }
 
-        if exception != nil {
-            self.delegate?.didFilter(withError: exception?.reason ?? "")
-        }
     }
 
 

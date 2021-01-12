@@ -1,4 +1,9 @@
-# Realm In App Browser (WIP)
+# RealmInAppBrowser (WIP)
+
+[![CI Status](https://img.shields.io/travis/matt-bro/RealmInAppBrowser.svg?style=flat)](https://travis-ci.org/matt-bro/RealmInAppBrowser)
+[![Version](https://img.shields.io/cocoapods/v/RealmInAppBrowser.svg?style=flat)](https://cocoapods.org/pods/RealmInAppBrowser)
+[![License](https://img.shields.io/cocoapods/l/RealmInAppBrowser.svg?style=flat)](https://cocoapods.org/pods/RealmInAppBrowser)
+[![Platform](https://img.shields.io/cocoapods/p/RealmInAppBrowser.svg?style=flat)](https://cocoapods.org/pods/RealmInAppBrowser)
 
 <h1 align="center">
   <br>
@@ -12,6 +17,8 @@
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
+  <a href="#example">Example</a> •
+  <a href="#installation">Installation</a> •
   <a href="#how-to-use">How To Use</a> •
   <a href="#credits">Credits</a> •
   <a href="#license">License</a>
@@ -36,6 +43,21 @@ The goal of this project is that the browser would roughly work like Realm Brows
 * (wip) Long press to see property/value info
 * (nice to have) save your queries, so you don't have to type everytime
 
+## Example
+
+To run the example project, clone the repo, and run `pod install` from the Example directory first.
+
+## Requirements
+
+## Installation
+
+RealmInAppBrowser is available through [CocoaPods](https://cocoapods.org). To install
+it, simply add the following line to your Podfile:
+
+```ruby
+pod 'RealmInAppBrowser'
+```
+
 ## How To Use
 
 Clone this application and install pods
@@ -49,7 +71,6 @@ spvc.modalPresentationStyle = .fullScreen
 spvc.pressedCloseAction = { self.dismiss(animated: true , completion: nil) }
 
 self.present(spvc, animated: true, completion: nil)
-
 ```
 
 ## Credits
@@ -60,7 +81,7 @@ This software uses the following open source packages:
 
 ## License
 
-MIT
+RealmInAppBrowser is available under the MIT license. See the LICENSE file for more info.
 
 ---
 

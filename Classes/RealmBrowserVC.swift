@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class RealmBrowserVC: UIViewController {
+internal class RealmBrowserVC: UIViewController {
 
     var headers:[String] = []
     //var objects:[DynamicObject] = []
@@ -20,7 +20,7 @@ class RealmBrowserVC: UIViewController {
 
     var filterTf: UITextField?
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         //self.view.translatesAutoresizingMaskIntoConstraints = false
@@ -32,21 +32,21 @@ class RealmBrowserVC: UIViewController {
         //flowLayout.minimumLineSpacing = 10
 
         let cvc = UICollectionViewController(collectionViewLayout: flowLayout)
-        cvc.collectionView.register(HeaderCell.self, forCellWithReuseIdentifier: HeaderCell.identifier)
-        cvc.collectionView.register(DataCell.self, forCellWithReuseIdentifier: DataCell.identifier)
-        cvc.collectionView.delegate = self
-        cvc.collectionView.dataSource = self
-        cvc.collectionView.backgroundColor = .white
-        cvc.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        cvc.collectionView?.register(HeaderCell.self, forCellWithReuseIdentifier: HeaderCell.identifier)
+        cvc.collectionView?.register(DataCell.self, forCellWithReuseIdentifier: DataCell.identifier)
+        cvc.collectionView?.delegate = self
+        cvc.collectionView?.dataSource = self
+        cvc.collectionView?.backgroundColor = .white
+        cvc.collectionView?.translatesAutoresizingMaskIntoConstraints = false
 
         
-        self.view.addSubview(cvc.collectionView)
+        self.view.addSubview(cvc.collectionView!)
 
         NSLayoutConstraint.activate([
-            cvc.collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            cvc.collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-            cvc.collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            cvc.collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:60)
+            cvc.collectionView!.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            cvc.collectionView!.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            cvc.collectionView!.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            cvc.collectionView!.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant:60)
         ])
 
         self.setupFilter()
@@ -59,6 +59,7 @@ class RealmBrowserVC: UIViewController {
 
 
         let tf = UITextField(frame: .zero)
+        tf.borderStyle = .roundedRect
         tf.placeholder = " Type your query"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.delegate = self
@@ -73,45 +74,33 @@ class RealmBrowserVC: UIViewController {
 
         let searchBtn = UIButton(type: .custom)
         searchBtn.translatesAutoresizingMaskIntoConstraints = false
-        searchBtn.setTitle(" Filter ", for: .normal)
-        searchBtn.backgroundColor = UIColor(red: 0.235, green: 0.278, blue: 0.482, alpha: 1.0)
-        searchBtn.layer.cornerRadius = 5.0
+        searchBtn.setTitle("Filter", for: .normal)
+        searchBtn.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        searchBtn.layer.cornerRadius = 5
         searchBtn.addTarget(self, action:#selector(pressedFilter) , for: .touchUpInside)
 
         let resetBtn = UIButton(type: .custom)
         resetBtn.translatesAutoresizingMaskIntoConstraints = false
-        resetBtn.setTitle(" Reset ", for: .normal)
+        resetBtn.setTitle("Reset", for: .normal)
         resetBtn.backgroundColor = .systemGray4
-        resetBtn.layer.cornerRadius = 5.0
+        resetBtn.layer.cornerRadius = 5
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
-
-
-        let container = UIView(frame: .zero)
-        container.backgroundColor = .systemGray6
-        container.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(container)
-        NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
-            container.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            container.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            container.heightAnchor.constraint(equalToConstant: 60)
-        ])
 
         let stackView = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
-        stackView.spacing = 5
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 20, bottom: 5, right: 20)
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        stackView.spacing = 5
         stackView.isLayoutMarginsRelativeArrangement = true
-        container.addSubview(stackView)
+        self.view.addSubview(stackView)
 
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: container.safeAreaLayoutGuide.topAnchor, constant: 0),
-            stackView.leadingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.leadingAnchor, constant: 0),
-            stackView.trailingAnchor.constraint(equalTo: container.safeAreaLayoutGuide.trailingAnchor, constant: 0),
-            stackView.heightAnchor.constraint(equalTo: container.safeAreaLayoutGuide.heightAnchor, constant: 0)
+            stackView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            stackView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            stackView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            stackView.heightAnchor.constraint(equalToConstant: 60)
         ])
 
         NSLayoutConstraint.activate([
@@ -132,11 +121,11 @@ class RealmBrowserVC: UIViewController {
 }
 
 extension RealmBrowserVC: UITextFieldDelegate {
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
 
     }
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
 //        let newText = textField.text?.appending(string)
 //        if let filterTf = filterTf, (textField == self.filterTf) {
 //
@@ -144,33 +133,33 @@ extension RealmBrowserVC: UITextFieldDelegate {
         return true
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.pressedFilter()
         return textField.resignFirstResponder()
     }
 }
 
 extension RealmBrowserVC: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.row == 0 {
             return CGSize(width: 200, height: 10)
         }
         return CGSize(width: 200, height: 10)
     }
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {}
 }
 
 extension RealmBrowserVC: UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.store?.propertyCount ?? 0
     }
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return (self.store?.objectCount ?? 0)+1
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         //header cell
         if indexPath.section == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HeaderCell.identifier, for: indexPath) as! HeaderCell
@@ -214,7 +203,7 @@ extension RealmBrowserVC: UICollectionViewDataSource {
 
 extension RealmBrowserVC: StoreDelegate {
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool) {
-        self.collectionVC?.collectionView.reloadData()
+        self.collectionVC?.collectionView?.reloadData()
     }
 }
 
