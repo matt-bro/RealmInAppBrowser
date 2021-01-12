@@ -59,6 +59,7 @@ internal class RealmBrowserVC: UIViewController {
 
 
         let tf = UITextField(frame: .zero)
+        tf.borderStyle = .roundedRect
         tf.placeholder = " Type your query"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.delegate = self
@@ -74,13 +75,15 @@ internal class RealmBrowserVC: UIViewController {
         let searchBtn = UIButton(type: .custom)
         searchBtn.translatesAutoresizingMaskIntoConstraints = false
         searchBtn.setTitle("Filter", for: .normal)
-        searchBtn.backgroundColor = .systemTeal
+        searchBtn.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        searchBtn.layer.cornerRadius = 5
         searchBtn.addTarget(self, action:#selector(pressedFilter) , for: .touchUpInside)
 
         let resetBtn = UIButton(type: .custom)
         resetBtn.translatesAutoresizingMaskIntoConstraints = false
         resetBtn.setTitle("Reset", for: .normal)
-        resetBtn.backgroundColor = .systemGray5
+        resetBtn.backgroundColor = .systemGray4
+        resetBtn.layer.cornerRadius = 5
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
 
         let stackView = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
@@ -88,7 +91,8 @@ internal class RealmBrowserVC: UIViewController {
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 20, bottom: 5, right: 20)
+        stackView.layoutMargins = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+        stackView.spacing = 5
         stackView.isLayoutMarginsRelativeArrangement = true
         self.view.addSubview(stackView)
 

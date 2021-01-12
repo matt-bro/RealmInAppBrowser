@@ -18,6 +18,8 @@ class Person: Object {
     @objc dynamic var mobile: String = ""
     @objc dynamic var email: String = ""
     @objc dynamic var birthdate: Date?
+    @objc dynamic var todo: Todo?
+    var todos = List<Todo>()
 
     override class func primaryKey() -> String? {
         return "id"

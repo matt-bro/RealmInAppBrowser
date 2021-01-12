@@ -35,6 +35,10 @@ internal class RealmObjectsVC: UITableViewController {
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
     }
 
+    func setup() {
+        self.tableView.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
@@ -61,6 +65,7 @@ internal class RealmObjectsVC: UITableViewController {
             todo.dueDate = Date()
             todo.done = (randomNumber > 5000)
 
+            object.todos.append(todo)
             try! realm.write {
                 realm.add(object)
                 realm.add(todo)

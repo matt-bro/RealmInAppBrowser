@@ -157,11 +157,23 @@ internal class RealmStore: NSObject, StoreProtocol {
             if let value = object.value(forKey: property.name) as? Date {
                 return value.description
             }
+        //case .linkingObjects, .object, .objectId:
+            // TODO: enable relations
+//            if let value = object.value(forKey: property.name) as? Object {
+//                return value.description
+//            }
+//
+//            if let value = object.value(forKey: property.name) as? List<RealmCollectionValue> {
+//                return value.description
+//            }
+
+
         default:
             if let value = object.value(forKey: property.name) as? String {
                 return value.description
             }
         }
+
 
         return nil
     }
