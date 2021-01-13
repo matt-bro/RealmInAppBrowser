@@ -1,0 +1,30 @@
+{
+  "name": "RealmInAppBrowser",
+  "version": "0.1.0",
+  "summary": "A short description of RealmInAppBrowser.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/matt-bro/RealmInAppBrowser",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "matt-bro": "matthias.brodalka@fresenius-netcare.com"
+  },
+  "source": {
+    "git": "https://github.com/matt-bro/RealmInAppBrowser.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "13.0"
+  },
+  "source_files": "Classes/**/*.{swift}",
+  "dependencies": {
+    "Realm": [
+
+    ],
+    "RealmSwift": [
+      ">= 4.4.1"
+    ]
+  }
+}

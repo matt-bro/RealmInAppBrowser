@@ -1,0 +1,6 @@
+framework module RealmInAppBrowser {
+  umbrella header "RealmInAppBrowser-umbrella.h"
+
+  export *
+  module * { export * }
+}
