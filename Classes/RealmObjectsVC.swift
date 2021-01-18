@@ -29,9 +29,6 @@ internal class RealmObjectsVC: UITableViewController {
         // Do any additional setup after loading the view.
         navigationItem.leftBarButtonItem = closeBtn
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(insertNewObject(_:)))
-        navigationItem.rightBarButtonItem = addButton
-
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         self.setup()
     }
@@ -45,35 +42,6 @@ internal class RealmObjectsVC: UITableViewController {
         clearsSelectionOnViewWillAppear = splitViewController!.isCollapsed
         super.viewWillAppear(animated)
     }
-
-    @objc
-        func insertNewObject(_ sender: Any) {
-            let realm = try! Realm()
-
-            let object = Person()
-            let randomNumber = Int.random(in: 1000...9999)
-            object.id = "\(randomNumber)"
-            object.firstName = "firstName \(randomNumber)"
-            object.lastName = "lastName \(randomNumber)"
-            object.address = "Address \(Int.random(in: 100...999))"
-            object.phone = "+00 \(Int.random(in: 10000...99999))"
-            object.mobile = "+00 \(Int.random(in: 10000...99999))"
-            object.birthdate = Date()
-
-
-            let todo = Todo()
-            todo.id = "\(randomNumber)"
-            todo.title = "Title \(Int.random(in: 100...999))"
-            todo.dueDate = Date()
-            todo.done = (randomNumber > 5000)
-
-            object.todos.append(todo)
-            try! realm.write {
-                realm.add(object)
-                realm.add(todo)
-            }
-            self.tableView.reloadData()
-        }
 
     @objc func pressedClose(_ sender: UIBarButtonItem) {
         self.pressedCloseAction?()

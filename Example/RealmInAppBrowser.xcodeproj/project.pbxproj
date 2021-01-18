@@ -15,6 +15,7 @@
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		67928182998122547FF04A72 /* Pods_RealmInAppBrowser_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57C864E5FD4C41AC8E4261CF /* Pods_RealmInAppBrowser_Tests.framework */; };
+		C9A035AD25B620F500C0D5CD /* TestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9A035AC25B620F500C0D5CD /* TestModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
 		965911830A902A0680B45519 /* Pods_RealmInAppBrowser_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RealmInAppBrowser_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C9A035AC25B620F500C0D5CD /* TestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestModels.swift; path = ../../Classes/TestModels.swift; sourceTree = "<group>"; };
 		DC96CABDE727D3523EFCB97D /* RealmInAppBrowser.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = RealmInAppBrowser.podspec; path = ../RealmInAppBrowser.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		ECE931E612B5B41075B2AEA1 /* Pods-RealmInAppBrowser_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RealmInAppBrowser_Example.debug.xcconfig"; path = "Target Support Files/Pods-RealmInAppBrowser_Example/Pods-RealmInAppBrowser_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		F2931383B3917F45FC0AE574 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			children = (
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
+				C9A035AC25B620F500C0D5CD /* TestModels.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
 				607FACDC1AFB9204008FA782 /* Images.xcassets */,
 				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
@@ -339,6 +342,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				C9A035AD25B620F500C0D5CD /* TestModels.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

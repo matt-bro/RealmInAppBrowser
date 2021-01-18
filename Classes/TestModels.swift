@@ -36,3 +36,46 @@ class Todo: Object {
         return "id"
     }
 }
+
+class TestModels {
+
+    static func createModels() {
+        let realm = try! Realm()
+        if realm.objects(Person.self).isEmpty {
+            var objects: [Object] = []
+
+            for _ in 0..<10 {
+                objects.append(createPerson(realm: realm))
+            }
+
+            for _ in 0..<10 {
+                objects.append(createTodo(realm: realm))
+            }
+        }
+    }
+
+    static func createPerson(realm:Realm) -> Person {
+        let object = Person()
+        let randomNumber = Int.random(in: 1000...9999)
+        object.id = "\(randomNumber)"
+        object.firstName = "firstName \(randomNumber)"
+        object.lastName = "lastName \(randomNumber)"
+        object.address = "Address \(Int.random(in: 100...999))"
+        object.phone = "+00 \(Int.random(in: 10000...99999))"
+        object.mobile = "+00 \(Int.random(in: 10000...99999))"
+        object.birthdate = Date()
+        return object
+    }
+
+    static func createTodo(realm:Realm) -> Todo {
+        let todo = Todo()
+        let randomNumber = Int.random(in: 1000...9999)
+        todo.id = "\(randomNumber)"
+        todo.title = "Title \(Int.random(in: 100...999))"
+        todo.dueDate = Date()
+        todo.done = (randomNumber > 5000)
+        return todo
+    }
+}
+
+

@@ -11,7 +11,7 @@
 import Foundation
 import UIKit
 
-class NoBreakSectionCollectionViewLayout: UICollectionViewLayout {
+internal class NoBreakSectionCollectionViewLayout: UICollectionViewLayout {
 
     var itemSize: CGSize
     var interItemSpacingY: CGFloat
