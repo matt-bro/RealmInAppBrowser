@@ -115,6 +115,12 @@ internal class RealmStore: NSObject, StoreProtocol {
     func propertyName(index: Int) -> String {
         loadedObjectProperties[index].name
     }
+
+    func propertyType(index: Int) -> String {
+        return loadedObjectProperties[index].type.name
+        //loadedObjectProperties[index].objectClassName ?? ""
+    }
+
     var propertyCount: Int {
         loadedObjectProperties.count
     }
@@ -238,4 +244,25 @@ internal class RealmStore: NSObject, StoreProtocol {
         self.delegate?.didUpdate(store: self, isEmpty: self.objects.isEmpty, hasError: false)
     }
 
+}
+
+extension PropertyType {
+    var name: String {
+        switch self.rawValue {
+        case 0: return "Int"
+        case 1: return "Bool"
+        case 2: return "String"
+        case 3: return "Data"
+        case 4: return "Date"
+        case 5: return "Float"
+        case 6: return "Double"
+        case 7: return "Object"
+        case 8: return "LinkingObject"
+        case 9: return "Any"
+        case 10: return "ObjectId"
+        case 11: return "Decimal128"
+        default:
+            return ""
+        }
+    }
 }

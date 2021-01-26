@@ -173,6 +173,7 @@ extension RealmBrowserVC: UICollectionViewDataSource {
     func configureHeaderCell(cell: HeaderCell, indexPath: IndexPath) -> HeaderCell {
         if let property = self.store?.propertyName(index: indexPath.row) {
             cell.textLabel.text = property
+            cell.typeLabel.text = self.store?.propertyType(index: indexPath.row)
 
             if let sortingBy = self.store?.sortingBy, sortingBy.name == property  {
                 cell.ascending = sortingBy.asc
@@ -207,9 +208,10 @@ extension RealmBrowserVC: StoreDelegate {
     }
 }
 
-class HeaderCell: UICollectionViewCell {
+internal class HeaderCell: UICollectionViewCell {
 
     var textLabel = UILabel()
+    var typeLabel = UILabel()
     var actionBtn: UIButton?
     var indexPath: IndexPath?
     var pressedAction: ((IndexPath?)->())?
@@ -239,6 +241,19 @@ class HeaderCell: UICollectionViewCell {
             textLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 0)
         ])
 
+
+        typeLabel.translatesAutoresizingMaskIntoConstraints = false
+        typeLabel.font = UIFont.systemFont(ofSize: 9)
+        typeLabel.textColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        typeLabel.text = "type"
+        contentView.addSubview(typeLabel)
+
+        NSLayoutConstraint.activate([
+            typeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            typeLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            typeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 15)
+        ])
+
         self.backgroundColor = .systemGray4
 
         let actionBtn = UIButton(type: .custom)
@@ -265,7 +280,7 @@ class HeaderCell: UICollectionViewCell {
     }
 }
 
-class DataCell: UICollectionViewCell {
+internal class DataCell: UICollectionViewCell {
     var textLabel = UILabel()
     static let identifier = "DataCell"
 
