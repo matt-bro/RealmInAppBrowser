@@ -1,4 +1,4 @@
-# RealmInAppBrowser (WIP)
+# RealmInAppBrowser
 
 [![CI Status](https://img.shields.io/travis/matt-bro/RealmInAppBrowser.svg?style=flat)](https://travis-ci.org/matt-bro/RealmInAppBrowser)
 [![Version](https://img.shields.io/cocoapods/v/RealmInAppBrowser.svg?style=flat)](https://cocoapods.org/pods/RealmInAppBrowser)
@@ -38,8 +38,8 @@ The goal of this project is that the browser would roughly work like Realm Brows
 ## Key Features
 
 * View your realm database with one call
-* (wip) Sort by properties
-* (wip) Filter your entities 
+* Sort by properties
+* Filter your entities 
 * (wip) Long press to see property/value info
 * (nice to have) save your queries, so you don't have to type everytime
 
