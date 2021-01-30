@@ -198,7 +198,40 @@ extension RealmBrowserVC: UICollectionViewDataSource {
     func configureDataCell(cell: DataCell, indexPath: IndexPath) -> DataCell {
         cell.textLabel.text = self.store?.value(propertyIndex: indexPath.row, objectIndex: indexPath.section-1)
         cell.backgroundColor = (indexPath.section%2 == 0) ? .systemGray6 : .white
+        cell.addGestureRecognizer(UILongPressGestureRecognizer(target: self, action: #selector(onLongPressCell(gesture:))))
+        cell.indexPath = indexPath
         return cell
+    }
+
+    @objc func onLongPressCell(gesture:UIGestureRecognizer) {
+        guard let cell = gesture.view as? DataCell else {
+            return
+        }
+
+        if gesture.state == .ended {
+            print("did long press")
+
+
+            let alertController = UIAlertController(title: "Select Photo", message: "value", preferredStyle: .actionSheet)
+            let action1 = UIAlertAction(title: "Copy value", style: .default) { (action) in
+                UIPasteboard.general.string = cell.textLabel.text
+            }
+            let action2 = UIAlertAction(title: "View value", style: .default) { (action) in
+                self.present(CellValueVC.instantiateWithNavigationAndClose(valueText: cell.textLabel.text), animated: true, completion: nil)
+            }
+
+            let action3 = UIAlertAction(title: "Cancel", style: .cancel) { (action) in }
+            alertController.addAction(action1)
+            alertController.addAction(action2)
+            alertController.addAction(action3)
+
+            if let presenter = alertController.popoverPresentationController {
+                presenter.sourceView = cell;
+                presenter.sourceRect = cell.bounds;
+            }
+            self.present(alertController, animated: true, completion: nil)
+
+        }
     }
 }
 
@@ -283,6 +316,7 @@ internal class HeaderCell: UICollectionViewCell {
 internal class DataCell: UICollectionViewCell {
     var textLabel = UILabel()
     static let identifier = "DataCell"
+    var indexPath: IndexPath?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -301,5 +335,56 @@ internal class DataCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+internal class CellValueVC: UIViewController {
+
+    var textView: UITextView?
+    var valueText: String? {
+        didSet {
+            self.textView?.text = valueText
+        }
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setup()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        self.textView?.text = valueText
+    }
+
+    func setup() {
+        let textView = UITextView(frame: .zero)
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        self.view.addSubview(textView)
+
+        NSLayoutConstraint.activate([
+            textView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0),
+            textView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0),
+            textView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0),
+            textView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0)
+        ])
+
+        self.textView = textView
+
+
+        let closeBtn = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(pressedClose))
+        self.navigationItem.leftBarButtonItem = closeBtn
+    }
+
+    @objc func pressedClose() {
+        self.dismiss(animated: true, completion: nil)
+    }
+
+    static func instantiateWithNavigationAndClose(valueText: String? = nil) -> UINavigationController {
+        let vc = CellValueVC()
+        vc.valueText = valueText
+        let nvc = UINavigationController(rootViewController: vc)
+        return nvc
     }
 }
