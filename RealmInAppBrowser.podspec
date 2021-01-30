@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'RealmInAppBrowser'
-  s.version          = '0.1.0'
+  s.version          = '0.2.0'
   s.summary          = 'View your Realm DB inside your App'
 
 # This description is used to generate tags and improve search results.
