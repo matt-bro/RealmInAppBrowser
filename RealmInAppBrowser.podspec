@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = 'https://github.com/matt-bro/RealmInAppBrowser'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'matt-bro' => 'matthias.brodalka@fresenius-netcare.com' }
+  s.author           = { 'matt-bro' => 'matbro@gmx.de' }
   s.source           = { :git => 'https://github.com/matt-bro/RealmInAppBrowser.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '13.0'
