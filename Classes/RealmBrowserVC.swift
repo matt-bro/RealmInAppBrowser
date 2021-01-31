@@ -57,10 +57,16 @@ internal class RealmBrowserVC: UIViewController {
 
     func setupFilter() {
 
+        let favoriteBtn = UIButton(type: .custom)
+        favoriteBtn.translatesAutoresizingMaskIntoConstraints = false
+        favoriteBtn.setTitle("Fav", for: .normal)
+        favoriteBtn.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        favoriteBtn.layer.cornerRadius = 5
+        favoriteBtn.addTarget(self, action:#selector(pressedFavorites) , for: .touchUpInside)
 
         let tf = UITextField(frame: .zero)
         tf.borderStyle = .roundedRect
-        tf.placeholder = " Type your query"
+        tf.placeholder = "Type your NSPredicate query"
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.delegate = self
         tf.autocorrectionType = .no
@@ -86,7 +92,7 @@ internal class RealmBrowserVC: UIViewController {
         resetBtn.layer.cornerRadius = 5
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
 
-        let stackView = UIStackView(arrangedSubviews: [tf, searchBtn, resetBtn])
+        let stackView = UIStackView(arrangedSubviews: [favoriteBtn, tf, searchBtn, resetBtn])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
@@ -104,7 +110,8 @@ internal class RealmBrowserVC: UIViewController {
         ])
 
         NSLayoutConstraint.activate([
-            searchBtn.widthAnchor.constraint(equalToConstant: 50)
+            searchBtn.widthAnchor.constraint(equalToConstant: 50),
+            favoriteBtn.widthAnchor.constraint(equalToConstant: 30)
         ])
     }
 
@@ -117,6 +124,10 @@ internal class RealmBrowserVC: UIViewController {
     @objc func pressedResetFilter() {
         self.filterTf?.text = ""
         self.store?.resetFilter()
+    }
+
+    @objc func pressedFavorites() {
+
     }
 }
 
