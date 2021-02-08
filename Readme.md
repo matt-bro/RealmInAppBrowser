@@ -40,8 +40,10 @@ The goal of this project is that the browser would roughly work like Realm Brows
 * Sort by properties
 * Filter your entities 
 * Long press to see property/value info
+* Save your queries, so you don't have to type everytime
+* (wip) Check if query is valid NSPredicate
+* (wip) Object properties overview
 * (wip) Show relations properly
-* (nice to have) save your queries, so you don't have to type everytime
 
 ## Example
 
