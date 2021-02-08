@@ -19,6 +19,7 @@ internal class RealmBrowserVC: UIViewController {
     var sortingBy: (name: String, asc: Bool)?
 
     var filterTf: UITextField?
+    var favoriteStore = FavoriteStore()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,6 +69,7 @@ internal class RealmBrowserVC: UIViewController {
         tf.borderStyle = .roundedRect
         tf.placeholder = "Type your NSPredicate query"
         tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.clearButtonMode = .always
         tf.delegate = self
         tf.autocorrectionType = .no
         tf.autocapitalizationType = .none
@@ -116,6 +118,9 @@ internal class RealmBrowserVC: UIViewController {
     }
 
     @objc func pressedFilter() {
+        guard let query = self.filterTf?.text, !query.isEmpty else {
+            return
+        }
         self.filterTf?.resignFirstResponder()
         self.store?.filter(query: self.filterTf?.text ?? "")
         print("pressed filter with query \(self.filterTf?.text ?? "")")
@@ -127,7 +132,16 @@ internal class RealmBrowserVC: UIViewController {
     }
 
     @objc func pressedFavorites() {
-
+        let vc = FavoritesVC()
+        vc.favoriteStore.queryObject = self.store?.queryObject
+        vc.currentQuery = self.filterTf?.text
+        vc.selectedFavoriteAction = { query in
+            self.filterTf?.text = query
+        }
+        
+        let nvc = UINavigationController(rootViewController: vc)
+        nvc.modalPresentationStyle = .formSheet
+        self.present(nvc, animated: true)
     }
 }
 
@@ -249,6 +263,7 @@ extension RealmBrowserVC: UICollectionViewDataSource {
 extension RealmBrowserVC: StoreDelegate {
     func didUpdate(store: StoreProtocol, isEmpty: Bool, hasError: Bool) {
         self.collectionVC?.collectionView?.reloadData()
+        self.favoriteStore.update()
     }
 }
 
