@@ -60,9 +60,11 @@ internal class RealmBrowserVC: UIViewController {
 
         let favoriteBtn = UIButton(type: .custom)
         favoriteBtn.translatesAutoresizingMaskIntoConstraints = false
-        favoriteBtn.setTitle("Fav", for: .normal)
-        favoriteBtn.backgroundColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
+        //favoriteBtn.setTitle("Fav", for: .normal)
+        favoriteBtn.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
         favoriteBtn.layer.cornerRadius = 5
+        favoriteBtn.setImage(UIImage(systemName: "star.fill"), for: .normal)
+        favoriteBtn.tintColor = UIColor(red: 0.23, green: 0.29, blue: 0.48, alpha: 1.00)
         favoriteBtn.addTarget(self, action:#selector(pressedFavorites) , for: .touchUpInside)
 
         let tf = UITextField(frame: .zero)
@@ -94,7 +96,7 @@ internal class RealmBrowserVC: UIViewController {
         resetBtn.layer.cornerRadius = 5
         resetBtn.addTarget(self, action:#selector(pressedResetFilter) , for: .touchUpInside)
 
-        let stackView = UIStackView(arrangedSubviews: [favoriteBtn, tf, searchBtn, resetBtn])
+        let stackView = UIStackView(arrangedSubviews: [favoriteBtn, tf, searchBtn])
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
@@ -119,6 +121,7 @@ internal class RealmBrowserVC: UIViewController {
 
     @objc func pressedFilter() {
         guard let query = self.filterTf?.text, !query.isEmpty else {
+            self.pressedResetFilter()
             return
         }
         self.filterTf?.resignFirstResponder()
@@ -139,28 +142,22 @@ internal class RealmBrowserVC: UIViewController {
             self.filterTf?.text = query
         }
         
-        let nvc = UINavigationController(rootViewController: vc)
-        nvc.modalPresentationStyle = .formSheet
-        self.present(nvc, animated: true)
+//        let nvc = UINavigationController(rootViewController: vc)
+//        nvc.modalPresentationStyle = .formSheet
+        self.present(vc, animated: true)
     }
 }
 
 extension RealmBrowserVC: UITextFieldDelegate {
-    public func textFieldDidEndEditing(_ textField: UITextField) {
-
-    }
-
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        let newText = textField.text?.appending(string)
-//        if let filterTf = filterTf, (textField == self.filterTf) {
-//
-//        }
-        return true
-    }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.pressedFilter()
         return textField.resignFirstResponder()
+    }
+
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        self.pressedResetFilter()
+        return true
     }
 }
 
